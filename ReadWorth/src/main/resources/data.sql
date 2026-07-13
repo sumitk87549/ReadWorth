@@ -317,3 +317,5 @@ KEY(id) VALUES (25, 'why-we-sleep', 'Why We Sleep', 'Matthew Walker', 'https://m
 MERGE INTO book_categories (book_id, category_id) KEY(book_id, category_id) VALUES (25, 6), (25, 4);
 MERGE INTO book_verdict_reasons (book_id, reason) KEY(book_id, reason) VALUES (25, 'The most convincing argument for prioritizing sleep ever written.'), (25, 'Some claims have been criticized as exaggerated, but the core thesis holds.');
 
+
+-- Books 26-50: Additional popular books
