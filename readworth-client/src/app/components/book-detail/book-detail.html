@@ -1,0 +1,262 @@
+<!-- ══ LOADING ══════════════════════════════════════════════════════════════ -->
+<div *ngIf="loading" class="bd-wrap">
+  <div style="display:flex; gap:2rem; flex-wrap:wrap;">
+    <div class="skeleton" style="width:180px; aspect-ratio:2/3; border-radius:0.75rem; flex-shrink:0;"></div>
+    <div style="flex:1; min-width:200px; display:flex; flex-direction:column; gap:1rem; padding-top:0.5rem;">
+      <div class="skeleton" style="height:2.25rem; width:65%; border-radius:0.5rem;"></div>
+      <div class="skeleton" style="height:1rem; width:35%; border-radius:0.25rem;"></div>
+      <div class="skeleton" style="height:6rem; width:100%; border-radius:0.75rem;"></div>
+      <div class="skeleton" style="height:4rem; width:100%; border-radius:0.75rem;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ERROR ═══════════════════════════════════════════════════════════════ -->
+<div *ngIf="error" class="bd-wrap" style="text-align:center; padding:5rem 1rem;">
+  <div style="max-width:30rem; margin:0 auto; background:color-mix(in srgb,#dc2626 6%,transparent); border:1.5px solid color-mix(in srgb,#dc2626 22%,transparent); border-radius:1rem; padding:2.5rem;">
+    <p style="font-weight:700; color:#dc2626; font-size:1.1rem; margin-bottom:0.5rem;">Not Found</p>
+    <p style="color:var(--muted); margin-bottom:1.5rem;">{{ error }}</p>
+    <a routerLink="/browse" class="btn-primary" style="text-decoration:none;">← Back to Browse</a>
+  </div>
+</div>
+
+<!-- ══ BOOK DETAIL ════════════════════════════════════════════════════════ -->
+<div *ngIf="!loading && !error && book" class="bd-wrap fade-in">
+
+  <!-- Back link -->
+  <a routerLink="/browse" class="back-link">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:0.875rem;height:0.875rem;">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+    </svg>
+    Back to all reviews
+  </a>
+
+  <!-- ── TOP HERO ─────────────────────────────────────────────────────── -->
+  <div class="bd-hero">
+
+    <!-- Cover column -->
+    <div class="bd-cover-col">
+      <div style="aspect-ratio:2/3; border-radius:0.875rem; overflow:hidden; box-shadow:0 20px 56px rgba(0,0,0,0.28); background:var(--surface);">
+        <img *ngIf="book.coverImage" [src]="book.coverImage" [alt]="book.title"
+             style="width:100%;height:100%;object-fit:cover;display:block;"
+             loading="eager"
+             (error)="book.coverImage = ''">
+        <div *ngIf="!book.coverImage" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:1.25rem;text-align:center;">
+          <span style="font-family:var(--font-serif);font-size:0.9rem;font-weight:700;color:var(--muted);line-height:1.4;">{{ book.title }}</span>
+        </div>
+      </div>
+
+      <!-- External links: GoodReads, Audible, Amazon, etc. -->
+      <div style="margin-top:1rem; display:flex; flex-direction:column; gap:0.5rem;">
+        <!-- Amazon link always shown if available -->
+        <a *ngIf="book.amazonLink" [href]="book.amazonLink" target="_blank" rel="noopener noreferrer" class="ext-link-btn">
+          <span>🛒</span> Buy on Amazon
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:0.7rem;height:0.7rem;margin-left:auto;opacity:0.6;"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/></svg>
+        </a>
+        <!-- GoodReads link -->
+        <a *ngIf="book.goodreadsLink" [href]="book.goodreadsLink" target="_blank" rel="noopener noreferrer" class="ext-link-btn">
+          <span>📚</span> View on GoodReads
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:0.7rem;height:0.7rem;margin-left:auto;opacity:0.6;"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/></svg>
+        </a>
+        <!-- Generic external links array -->
+        <a *ngFor="let link of book.externalLinks" [href]="link.url" target="_blank" rel="noopener noreferrer" class="ext-link-btn">
+          {{ link.label }}
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:0.7rem;height:0.7rem;margin-left:auto;opacity:0.6;"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Meta column -->
+    <div class="bd-meta-col">
+      <!-- Badges -->
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.875rem;">
+        <span class="badge-chip accent">{{ primaryCategory }}</span>
+        <span class="badge-chip" [style.color]="difficultyColor" style="border:1.5px solid currentColor; background:color-mix(in srgb,currentColor 10%,transparent);">
+          {{ book.difficultyLevel | titlecase }}
+        </span>
+      </div>
+
+      <h1 class="bd-title">{{ book.title }}</h1>
+      <p style="font-size:1.0625rem;color:var(--muted);font-style:italic;margin:0 0 1.125rem;">by {{ book.authorName }}</p>
+
+      <!-- Stars + page count -->
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;">
+        <div style="display:flex;gap:2px;color:var(--accent);">
+          <svg *ngFor="let _ of getStars(book.ourRating)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:1.125rem;height:1.125rem;">
+            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd"/>
+          </svg>
+          <svg *ngFor="let _ of getEmptyStars(book.ourRating)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:1.125rem;height:1.125rem;opacity:0.3;color:var(--accent);">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/>
+          </svg>
+        </div>
+        <span style="font-size:0.8125rem;color:var(--muted);">{{ book.ourRating }}/5 · {{ book.lengthLabel }}</span>
+      </div>
+
+      <!-- Quick stat chips -->
+      <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem;">
+        <div class="stat-chip">
+          <span class="stat-label">Read Time</span>
+          <span class="stat-val">{{ book.expectedTimeInvestment }}h</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">Tone</span>
+          <span class="stat-val">{{ (book.languageTone || '').split(',')[0] }}</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">ROI</span>
+          <span class="stat-val" [title]="book.estimatedRoi ?? ''">{{ (book.estimatedRoi ?? '').split('—')[0].trim() || 'High' }}</span>
+        </div>
+      </div>
+
+      <!-- Verdict panel -->
+      <div class="verdict-panel" [style.border-color]="verdictColor" [style.background]="'color-mix(in srgb,' + verdictColor + ' 5%, var(--surface))'">
+        <div style="flex-shrink:0;text-align:center;">
+          <div style="position:relative;width:68px;height:68px;margin:0 auto;">
+            <svg viewBox="0 0 36 36" style="width:68px;height:68px;transform:rotate(-90deg);">
+              <path fill="none" stroke="var(--border)" stroke-width="3" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+              <path fill="none" [attr.stroke]="verdictColor" stroke-width="3.5" stroke-linecap="round"
+                    [attr.stroke-dasharray]="(book.confidencePercentage ?? 0) + ', 100'"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            </svg>
+            <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.8125rem;font-weight:800;color:var(--ink);">{{ book.confidencePercentage }}%</span>
+          </div>
+          <div style="font-size:0.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:0.25rem;">confidence</div>
+        </div>
+        <div style="flex:1;min-width:140px;">
+          <div style="font-family:var(--font-serif);font-size:1.375rem;font-weight:900;line-height:1;" [style.color]="verdictColor">{{ verdictLabel }}</div>
+          <ul *ngIf="book.verdictReasons?.length" style="list-style:none;padding:0;margin:0.625rem 0 0;display:flex;flex-direction:column;gap:0.3rem;">
+            <li *ngFor="let r of book.verdictReasons" style="display:flex;align-items:flex-start;gap:0.4rem;font-size:0.8rem;line-height:1.5;color:var(--ink);">
+              <span [style.color]="verdictColor" style="flex-shrink:0;font-weight:900;font-size:0.85rem;line-height:1.5;">→</span>{{ r }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── How Not To Judge ──────────────────────────────────────────────── -->
+  <div *ngIf="book.howNotToJudge" class="how-not-block" style="margin-bottom:2rem;">
+    <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:0.375rem;">⚠ How Not to Judge This Book</div>
+    <p style="font-size:0.9375rem;color:var(--ink);line-height:1.75;margin:0;">{{ book.howNotToJudge }}</p>
+  </div>
+
+  <!-- ── TABS — wrap on mobile, no horizontal scroll ─────────────────── -->
+  <div class="tab-bar">
+    <button class="tab-btn" (click)="setTab('about')"
+            [class.tab-active]="activeTab==='about'">About the Book</button>
+    <button class="tab-btn" (click)="setTab('story')"
+            [class.tab-active]="activeTab==='story'">Author Story</button>
+    <button class="tab-btn" (click)="setTab('expect')"
+            [class.tab-active]="activeTab==='expect'">What To Expect</button>
+    <button class="tab-btn" (click)="setTab('outcome')"
+            [class.tab-active]="activeTab==='outcome'">Expected Outcome</button>
+  </div>
+
+  <!-- ── TAB PANELS ──────────────────────────────────────────────────── -->
+  <div class="tab-panel fade-in">
+
+    <div *ngIf="activeTab==='about'">
+      <h2 class="panel-h2">About the Book</h2>
+      <p style="font-size:1.0625rem;line-height:1.85;color:var(--ink);white-space:pre-line;">{{ book.aboutDescription }}</p>
+    </div>
+
+    <div *ngIf="activeTab==='story'" style="border-left:4px solid var(--accent);padding-left:1.25rem;">
+      <h2 class="panel-h2">The Author's True Story</h2>
+      <p *ngIf="book.authorTrueStory; else noStory" style="font-size:1.0625rem;line-height:1.85;color:var(--ink);font-style:italic;white-space:pre-line;">{{ book.authorTrueStory }}</p>
+      <ng-template #noStory><p style="color:var(--muted);font-style:italic;">No author story available.</p></ng-template>
+    </div>
+
+    <div *ngIf="activeTab==='expect'">
+      <h2 class="panel-h2">What To Expect</h2>
+      <p *ngIf="book.whatToExpect; else noExpect" style="font-size:1.0625rem;line-height:1.85;color:var(--ink);white-space:pre-line;">{{ book.whatToExpect }}</p>
+      <ng-template #noExpect><p style="color:var(--muted);font-style:italic;">No expectations summary yet.</p></ng-template>
+      <div *ngIf="book.languageTone" style="margin-top:1.5rem;padding-top:1.25rem;border-top:1.5px solid var(--border);">
+        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">Language &amp; Tone</div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.375rem;">
+          <span *ngFor="let tone of (book.languageTone || '').split(',')"
+                style="font-size:0.75rem;font-weight:600;padding:0.25rem 0.75rem;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accent);border-radius:9999px;border:1px solid color-mix(in srgb,var(--accent) 28%,transparent);">
+            {{ tone.trim() }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab==='outcome'">
+      <h2 class="panel-h2">Expected Outcome</h2>
+      <p *ngIf="book.expectedOutcome; else noOutcome" style="font-size:1.0625rem;line-height:1.85;color:var(--ink);white-space:pre-line;">{{ book.expectedOutcome }}</p>
+      <ng-template #noOutcome><p style="color:var(--muted);font-style:italic;">No outcome summary yet.</p></ng-template>
+      <div *ngIf="book.estimatedRoi" style="margin-top:1.5rem;padding:1.25rem;background:color-mix(in srgb,var(--accent) 8%,transparent);border:1.5px solid color-mix(in srgb,var(--accent) 22%,transparent);border-radius:0.75rem;">
+        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:0.375rem;">Estimated ROI</div>
+        <p style="font-weight:600;color:var(--ink);margin:0;font-size:0.9375rem;">{{ book.estimatedRoi }}</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+  /* Layout wrapper — each page owns its own container now */
+  .bd-wrap { max-width: 980px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  @media(min-width:640px){ .bd-wrap { padding: 1.5rem 1.5rem 4rem; } }
+  @media(min-width:1024px){ .bd-wrap { padding: 2rem 2rem 5rem; } }
+
+  .back-link { display:inline-flex; align-items:center; gap:0.375rem; font-size:0.8125rem; font-weight:600; color:var(--muted); text-decoration:none; margin-bottom:2rem; transition:color 0.2s; }
+  .back-link:hover { color:var(--accent); }
+
+  /* Hero two-column layout */
+  .bd-hero { display:flex; gap:2.5rem; flex-wrap:wrap; margin-bottom:2rem; align-items:flex-start; }
+  .bd-cover-col { flex-shrink:0; width:160px; }
+  .bd-meta-col  { flex:1; min-width:240px; }
+  @media(min-width:600px){ .bd-cover-col { width:200px; } }
+
+  .bd-title { font-family:var(--font-serif); font-size:clamp(1.625rem,4vw,2.625rem); font-weight:900; color:var(--ink); line-height:1.1; margin:0 0 0.375rem; letter-spacing:-0.02em; }
+
+  /* External link buttons */
+  .ext-link-btn { display:flex; align-items:center; gap:0.4rem; padding:0.55rem 0.875rem; background:var(--surface); border:1.5px solid var(--border); border-radius:0.5rem; font-size:0.8rem; font-weight:600; color:var(--ink); text-decoration:none; transition:all 0.2s; }
+  .ext-link-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* Stat chips */
+  .stat-chip { display:flex; flex-direction:column; background:var(--surface); border:1.5px solid var(--border); border-radius:0.5rem; padding:0.5rem 0.875rem; min-width:80px; }
+  .stat-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:0.125rem; }
+  .stat-val   { font-weight:700; color:var(--ink); font-size:0.9rem; }
+
+  /* Badge chips */
+  .badge-chip { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; padding:0.25rem 0.625rem; border-radius:9999px; }
+  .badge-chip.accent { color:var(--accent); background:color-mix(in srgb,var(--accent) 12%,transparent); }
+
+  /* Verdict panel */
+  .verdict-panel { border:2px solid; border-radius:1rem; padding:1.25rem 1.375rem; display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap; }
+
+  /* TAB BAR — wraps on mobile, no overflow scroll */
+  .tab-bar {
+    display: flex;
+    flex-wrap: wrap;          /* ← KEY: tabs wrap instead of overflow */
+    gap: 0;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 1.75rem;
+  }
+  .tab-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--muted);
+    white-space: nowrap;
+    margin-bottom: -2px;     /* align with border-bottom */
+  }
+  .tab-btn:hover  { color: var(--accent); }
+  .tab-btn.tab-active { color: var(--accent); border-bottom-color: var(--accent); }
+  @media(min-width:520px){ .tab-btn { font-size:0.8125rem; padding:0.75rem 1.25rem; } }
+
+  /* Tab panel card */
+  .tab-panel { background:var(--surface); border:1.5px solid var(--border); border-radius:1rem; padding:1.5rem; min-height:10rem; margin-bottom:3rem; }
+  @media(min-width:640px){ .tab-panel { padding:2rem; } }
+  .panel-h2 { font-family:var(--font-serif); font-size:1.375rem; font-weight:800; color:var(--ink); margin:0 0 1.125rem; padding-bottom:0.75rem; border-bottom:1.5px solid var(--border); }
+</style>

@@ -1,0 +1,68 @@
+<div class="container px-site" style="padding-top:1.5rem; padding-bottom:3rem;">
+<div class="fb-page">
+  <div class="fb-hero">
+    <p class="eyebrow">Your Voice Matters</p>
+    <h1 style="font-family:var(--font-serif); font-size:clamp(1.75rem,4vw,2.75rem); font-weight:900; color:var(--ink); line-height:1.1; margin:0 0 0.875rem;">
+      Share Your <span style="color:var(--accent);">Feedback</span>
+    </h1>
+    <p style="font-size:0.9375rem; color:var(--muted); max-width:32rem; line-height:1.75;">
+      Disagree with a verdict? Have a book we should review next? Found something confusing? Every message is read personally — and helps make ReadWorth better.
+    </p>
+  </div>
+
+  <!-- Success State -->
+  <div *ngIf="success" class="success-card fade-in">
+    <div class="success-icon">✓</div>
+    <h3 style="font-family:var(--font-serif); font-size:1.375rem; font-weight:800; color:var(--ink); margin-bottom:0.375rem;">Feedback Received!</h3>
+    <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.5rem;">Thank you for taking the time. I read everything and will get back to you if you left an email.</p>
+    <button (click)="resetForm()" class="btn-primary">Submit Another</button>
+  </div>
+
+  <!-- Form -->
+  <form *ngIf="!success" [formGroup]="feedbackForm" (ngSubmit)="onSubmit()" class="fb-form fade-in">
+
+    <!-- Error banner -->
+    <div *ngIf="error" class="error-banner">⚠ {{ error }}</div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label for="fb-name" class="form-label">Your Name <span class="optional">(optional)</span></label>
+        <input id="fb-name" type="text" formControlName="name" class="form-input" placeholder="e.g. Sumit Kumar" autocomplete="name">
+      </div>
+      <div class="field-group">
+        <label for="fb-email" class="form-label">Email <span class="optional">(optional, for reply)</span></label>
+        <input id="fb-email" type="email" formControlName="email" class="form-input" placeholder="you@example.com" autocomplete="email">
+        <p *ngIf="hasError('email')" class="field-error">Please enter a valid email address.</p>
+      </div>
+    </div>
+
+    <div>
+      <label for="fb-message" class="form-label">Message <span style="color:var(--accent);">*</span></label>
+      <textarea id="fb-message" formControlName="message" rows="7" class="form-textarea"
+                placeholder="e.g. The review for Dune missed the worldbuilding angle entirely — here's why I think it's a YES for sci-fi readers…"></textarea>
+      <p *ngIf="hasError('message')" class="field-error">Please write at least 10 characters.</p>
+      <p style="font-size:0.75rem; color:var(--muted); margin-top:0.375rem;">Be as specific as possible — specific feedback is actionable feedback.</p>
+    </div>
+
+    <button id="fb-submit-btn" type="submit" [disabled]="feedbackForm.invalid || submitting" class="btn-primary" style="width:100%; padding:1rem; font-size:1rem;">
+      <span *ngIf="!submitting">Send Feedback →</span>
+      <span *ngIf="submitting">Sending…</span>
+    </button>
+  </form>
+</div>
+
+<style>
+  .fb-page  { max-width:640px; margin:0 auto; padding-bottom:4rem; }
+  .fb-hero  { padding:2rem 0 2rem; border-bottom:1.5px solid var(--border); margin-bottom:2rem; }
+  .eyebrow  { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.15em; color:var(--accent); margin-bottom:0.5rem; }
+  .fb-form  { display:flex; flex-direction:column; gap:1.375rem; background:var(--surface); border:1.5px solid var(--border); border-radius:1.125rem; padding:2rem; }
+  .field-row{ display:grid; grid-template-columns:1fr; gap:1.25rem; }
+  @media(min-width:580px){ .field-row { grid-template-columns:1fr 1fr; } }
+  .field-group { display:flex; flex-direction:column; gap:0; }
+  .optional { font-size:0.65rem; text-transform:lowercase; letter-spacing:0; font-weight:400; color:var(--muted); }
+  .field-error { font-size:0.75rem; color:#dc2626; margin-top:0.25rem; }
+  .error-banner { background:color-mix(in srgb, #dc2626 8%, transparent); border:1.5px solid color-mix(in srgb, #dc2626 28%, transparent); color:#dc2626; padding:0.75rem 1rem; border-radius:0.5rem; font-size:0.875rem; }
+  .success-card { text-align:center; background:var(--surface); border:1.5px solid var(--border); border-radius:1.125rem; padding:3rem 2rem; }
+  .success-icon { width:3.5rem; height:3.5rem; border-radius:50%; background:color-mix(in srgb, #16a34a 14%, transparent); color:#16a34a; font-size:1.5rem; font-weight:900; display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; }
+</style>
+</div>

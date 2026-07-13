@@ -1,0 +1,93 @@
+<div class="container px-site" style="padding-top:1.5rem; padding-bottom:3rem;">
+<div class="page-hero">
+  <p class="eyebrow">About ReadWorth</p>
+  <h1 style="font-family:var(--font-serif); font-size:clamp(2rem,5vw,3.25rem); font-weight:900; color:var(--ink); line-height:1.1; margin:0 0 1rem;">
+    We read it.<br>So you can <span style="color:var(--accent);">decide fast.</span>
+  </h1>
+  <p style="font-size:1.0625rem; color:var(--muted); max-width:38rem; line-height:1.75;">
+    ReadWorth is a curated, verdict-first book review platform. Every review answers one question clearly: <strong style="color:var(--ink);">Is this book worth your time?</strong> No summaries. No star-rating ambiguity. Just a decision — backed by evidence.
+  </p>
+</div>
+
+<!-- Mission section -->
+<section class="content-section">
+  <div class="two-col-grid">
+    <div>
+      <h2 class="section-h2">The Problem with Book Reviews</h2>
+      <p class="body-text">The average professional reads 1–2 books per month. With over 4 million books published every year, the signal-to-noise ratio is catastrophic. Most book reviews tell you <em>what</em> a book is about — not <em>whether</em> it's worth 8–20 hours of your irreplaceable attention.</p>
+      <p class="body-text" style="margin-top:1rem;">Goodreads ratings are popularity contests. Amazon reviews are marketing. Blog summaries spoil the content. None of them give you a clear answer to the one question you actually need answered before you invest your time.</p>
+    </div>
+    <div>
+      <h2 class="section-h2">Our Answer</h2>
+      <p class="body-text">ReadWorth was built on a simple thesis: <strong style="color:var(--ink);">a decision is more valuable than a description.</strong></p>
+      <p class="body-text" style="margin-top:1rem;">Every review on this platform gives you a binary verdict — YES, NO, or CONDITIONAL — alongside a confidence percentage, explicit reasons, and an honest ROI estimate. You get everything you need to make a smart reading decision in under 60 seconds.</p>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="content-section" style="background:var(--surface); border:1.5px solid var(--border); border-radius:1.25rem; padding:2.5rem;">
+  <h2 class="section-h2" style="text-align:center; margin-bottom:2rem;">Our Review Process</h2>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.5rem;">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <h3 class="step-title">Cover to Cover</h3>
+      <p class="step-desc">Full read. No shortcuts, no outsourcing to summaries. If we haven't read it end-to-end, we don't review it.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <h3 class="step-title">Honest Audit</h3>
+      <p class="step-desc">We ask: who is this actually for? What does it cost in time? What's the real, lasting takeaway vs. the marketing promise?</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <h3 class="step-title">Calibrated Verdict</h3>
+      <p class="step-desc">YES / NO / CONDITIONAL — scored with a confidence percentage. Not hedged. Not diplomatic. Clear.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <h3 class="step-title">ROI Estimate</h3>
+      <p class="step-desc">We estimate the return on your time investment. A book that changes a core mental model in 5 hours is infinitely more valuable than a 600-page review of things you already know.</p>
+    </div>
+  </div>
+</section>
+
+<!-- What we cover -->
+<section class="content-section">
+  <h2 class="section-h2">What We Cover</h2>
+  <p class="body-text" style="margin-bottom:1.5rem;">ReadWorth spans non-fiction and fiction equally — because great fiction builds mental models just as powerfully as the best business book. Current coverage:</p>
+  <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+    <span *ngFor="let cat of categories" class="cat-chip">{{ cat }}</span>
+  </div>
+  <p class="body-text" style="margin-top:1.5rem;">We add new reviews weekly. The library is growing. <a routerLink="/browse" style="color:var(--accent); font-weight:600;">Browse everything we've reviewed →</a></p>
+</section>
+
+<!-- Principles -->
+<section class="content-section" style="background:var(--oak); border-radius:1.25rem; padding:2.5rem; margin-bottom:3rem;">
+  <h2 style="font-family:var(--font-serif); font-size:1.75rem; font-weight:800; color:var(--cream); margin:0 0 1.5rem;">Our Editorial Principles</h2>
+  <div style="display:flex; flex-direction:column; gap:1rem;">
+    <div *ngFor="let p of principles" style="display:flex; align-items:flex-start; gap:0.875rem;">
+      <span style="color:var(--accent); font-size:1rem; margin-top:0.1rem; flex-shrink:0;">✦</span>
+      <div>
+        <strong style="color:var(--cream); font-size:0.9375rem;">{{ p.title }}</strong>
+        <span style="color:#a09488; font-size:0.875rem;"> — {{ p.desc }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-hero { padding: 2.5rem 0 2rem; border-bottom: 1.5px solid var(--border); margin-bottom: 2.5rem; }
+  .eyebrow { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.15em; color:var(--accent); margin-bottom:0.625rem; }
+  .content-section { margin-bottom: 2.5rem; }
+  .two-col-grid { display:grid; grid-template-columns:1fr; gap:2rem; }
+  @media(min-width:700px){ .two-col-grid { grid-template-columns:1fr 1fr; } }
+  .section-h2 { font-family:var(--font-serif); font-size:1.5rem; font-weight:800; color:var(--ink); margin:0 0 1rem; }
+  .body-text { font-size:0.9375rem; color:var(--ink); line-height:1.8; }
+  .process-step { background:var(--paper); border:1.5px solid var(--border); border-radius:0.875rem; padding:1.25rem; }
+  .step-num { font-family:var(--font-serif); font-size:1.75rem; font-weight:900; color:var(--accent); margin-bottom:0.5rem; line-height:1; }
+  .step-title { font-family:var(--font-serif); font-weight:700; color:var(--ink); margin-bottom:0.375rem; font-size:1rem; }
+  .step-desc { font-size:0.8375rem; color:var(--muted); line-height:1.65; }
+  .cat-chip { font-size:0.75rem; font-weight:700; padding:0.3rem 0.875rem; background:color-mix(in srgb, var(--accent) 10%, transparent); color:var(--accent); border-radius:9999px; border:1px solid color-mix(in srgb, var(--accent) 25%, transparent); }
+</style>
+</div>

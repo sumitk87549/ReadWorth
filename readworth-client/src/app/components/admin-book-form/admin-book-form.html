@@ -1,0 +1,151 @@
+<form [formGroup]="bookForm" (ngSubmit)="onSubmit()" class="space-y-8 bg-surface dark:bg-surface-hover p-6 md:p-8 rounded-lg border border-border text-ink dark:text-cream">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-serif font-bold">{{ book ? 'Edit Book' : 'Add New Book' }}</h2>
+    <div class="space-x-3">
+      <button type="button" (click)="cancel.emit()" class="px-4 py-2 border border-border rounded text-sm hover:bg-paper dark:hover:bg-oak transition-colors">Cancel</button>
+      <button type="submit" class="px-4 py-2 bg-accent text-white rounded text-sm font-bold hover:bg-accent-hover transition-colors">Save Book</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Basic Info -->
+    <div class="space-y-4">
+      <h3 class="font-bold border-b border-border pb-2">Basic Info</h3>
+      <div>
+        <label class="block text-xs font-bold uppercase mb-1">Title</label>
+        <input type="text" formControlName="title" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak">
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase mb-1">Author Name</label>
+        <input type="text" formControlName="authorName" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak">
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase mb-1">Cover Image URL</label>
+        <input type="text" formControlName="coverImage" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak">
+      </div>
+      
+      <div>
+        <label class="block text-xs font-bold uppercase mb-1">Categories</label>
+        <div class="flex flex-wrap gap-3 p-3 border border-border rounded bg-paper dark:bg-oak h-32 overflow-y-auto">
+          <label *ngFor="let cat of categories" class="flex items-center space-x-2 text-sm">
+            <input type="checkbox" [checked]="isCategorySelected(cat.id)" (change)="onCategoryChange($event, cat.id)" class="rounded text-accent focus:ring-accent">
+            <span>{{ cat.name }}</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metadata -->
+    <div class="space-y-4">
+      <h3 class="font-bold border-b border-border pb-2">Metadata</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Difficulty</label>
+          <select formControlName="difficultyLevel" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak">
+            <option value="EASY">Easy</option>
+            <option value="MODERATE">Moderate</option>
+            <option value="CHALLENGING">Challenging</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Length Label</label>
+          <input type="text" formControlName="lengthLabel" placeholder="e.g. 300 pages" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak">
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Language Tone</label>
+          <input type="text" formControlName="languageTone" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak">
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Our Rating (1-5)</label>
+          <input type="number" min="1" max="5" formControlName="ourRating" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Blocks -->
+  <div class="space-y-4">
+    <h3 class="font-bold border-b border-border pb-2">Content Descriptions</h3>
+    <div>
+      <label class="block text-xs font-bold uppercase mb-1">About Description</label>
+      <textarea formControlName="aboutDescription" rows="4" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak"></textarea>
+    </div>
+    <div>
+      <label class="block text-xs font-bold uppercase mb-1">Author's True Story</label>
+      <textarea formControlName="authorTrueStory" rows="3" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak"></textarea>
+    </div>
+    <div>
+      <label class="block text-xs font-bold uppercase mb-1">What to Expect</label>
+      <textarea formControlName="whatToExpect" rows="3" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak"></textarea>
+    </div>
+    <div>
+      <label class="block text-xs font-bold uppercase mb-1">Expected Outcome</label>
+      <textarea formControlName="expectedOutcome" rows="3" class="w-full p-2 border border-border rounded bg-paper dark:bg-oak"></textarea>
+    </div>
+    <div>
+      <label class="block text-xs font-bold uppercase mb-1 text-accent">How Not To Judge (Important)</label>
+      <textarea formControlName="howNotToJudge" rows="3" class="w-full p-2 border border-accent rounded bg-paper dark:bg-oak"></textarea>
+    </div>
+  </div>
+
+  <!-- THE VERDICT -->
+  <div class="bg-paper dark:bg-oak p-6 rounded-lg border border-border space-y-6 shadow-inner">
+    <h3 class="font-serif text-xl font-bold border-b border-border pb-2">The Verdict Block</h3>
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase mb-1">Verdict</label>
+        <select formControlName="verdict" class="w-full p-2 border border-border rounded bg-surface dark:bg-surface-hover font-bold">
+          <option value="YES">YES</option>
+          <option value="NO">NO</option>
+          <option value="CONDITIONAL">CONDITIONAL</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase mb-1">Confidence %</label>
+        <input type="number" min="0" max="100" formControlName="confidencePercentage" class="w-full p-2 border border-border rounded bg-surface dark:bg-surface-hover">
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase mb-1">Time Invested (hrs)</label>
+        <input type="number" step="0.5" formControlName="expectedTimeInvestment" class="w-full p-2 border border-border rounded bg-surface dark:bg-surface-hover">
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase mb-1">Est. ROI</label>
+        <input type="text" formControlName="estimatedRoi" class="w-full p-2 border border-border rounded bg-surface dark:bg-surface-hover">
+      </div>
+    </div>
+
+    <div>
+      <div class="flex justify-between items-center mb-2">
+        <label class="block text-xs font-bold uppercase">Verdict Reasons (Why?)</label>
+        <button type="button" (click)="addVerdictReason()" class="text-xs text-accent hover:underline">+ Add Reason</button>
+      </div>
+      <div formArrayName="verdictReasons" class="space-y-2">
+        <div *ngFor="let control of verdictReasons.controls; let i=index" class="flex gap-2">
+          <input type="text" [formControlName]="i" class="flex-grow p-2 border border-border rounded bg-surface dark:bg-surface-hover text-sm">
+          <button type="button" (click)="removeVerdictReason(i)" class="px-3 py-2 text-red-500 bg-surface border border-border rounded hover:bg-red-50">&times;</button>
+        </div>
+        <p *ngIf="verdictReasons.length === 0" class="text-sm text-muted italic">No reasons added. Add bullet points for why this verdict was given.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- External Links -->
+  <div>
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="font-bold border-b border-border pb-2 w-full flex justify-between">
+        External Links
+        <button type="button" (click)="addExternalLink()" class="text-xs text-accent hover:underline font-normal">+ Add Link</button>
+      </h3>
+    </div>
+    <div formArrayName="externalLinks" class="space-y-3 mt-4">
+      <div *ngFor="let linkGroup of externalLinks.controls; let i=index" [formGroupName]="i" class="flex gap-2">
+        <input type="text" formControlName="label" placeholder="Label (e.g. Amazon)" class="w-1/4 p-2 border border-border rounded bg-paper dark:bg-oak text-sm">
+        <input type="text" formControlName="url" placeholder="URL" class="flex-grow p-2 border border-border rounded bg-paper dark:bg-oak text-sm">
+        <button type="button" (click)="removeExternalLink(i)" class="px-3 py-2 text-red-500 bg-paper border border-border rounded hover:bg-red-50">&times;</button>
+      </div>
+      <p *ngIf="externalLinks.length === 0" class="text-sm text-muted italic">No external links added.</p>
+    </div>
+  </div>
+  
+</form>

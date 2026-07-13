@@ -1,0 +1,99 @@
+<div style="min-height:100vh; display:flex; flex-direction:column;">
+
+  <!-- ══ HEADER ══════════════════════════════════════════════════════════ -->
+  <header class="site-header">
+    <div class="container px-site" style="display:flex; align-items:center; justify-content:space-between; gap:1rem;">
+
+      <!-- Logo — larger size -->
+      <a routerLink="/" class="nav-logo" style="font-size:1.625rem;">
+        ReadWorth<span>.</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="nav-desktop" style="gap:2rem;">
+        <a routerLink="/browse"   routerLinkActive="active" class="nav-link" style="font-size:0.9375rem;">Browse</a>
+        <a routerLink="/about"    routerLinkActive="active" class="nav-link" style="font-size:0.9375rem;">About</a>
+        <a routerLink="/contact"  routerLinkActive="active" class="nav-link" style="font-size:0.9375rem;">Contact</a>
+        <a routerLink="/feedback" routerLinkActive="active" class="nav-link" style="font-size:0.9375rem;">Feedback</a>
+        <a *ngIf="authService.isAuthenticated()" routerLink="/admin" routerLinkActive="active"
+           class="nav-link" style="color:var(--accent); font-weight:700; font-size:0.9375rem;">Dashboard</a>
+      </div>
+
+      <!-- Right controls -->
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <button (click)="toggleTheme()" id="theme-toggle-btn" class="theme-btn" aria-label="Toggle theme" title="Toggle Day / Night">
+          <svg *ngIf="!themeService.isDark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+          </svg>
+          <svg *ngIf="themeService.isDark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+          </svg>
+        </button>
+        <button *ngIf="authService.isAuthenticated()" (click)="logout()" class="btn-ghost hide-mobile" style="font-size:0.875rem;">Logout</button>
+        <button class="hamburger" (click)="menuOpen = !menuOpen" aria-label="Menu" id="mobile-menu-btn">
+          <span [style.transform]="menuOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none'"></span>
+          <span [style.opacity]="menuOpen ? '0' : '1'"></span>
+          <span [style.transform]="menuOpen ? 'rotate(-45deg) translate(5px, -5px)' : 'none'"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Drawer -->
+    <nav class="nav-mobile-menu" [class.open]="menuOpen">
+      <a routerLink="/browse"   routerLinkActive="active" class="nav-link" (click)="menuOpen=false">Browse</a>
+      <a routerLink="/about"    routerLinkActive="active" class="nav-link" (click)="menuOpen=false">About</a>
+      <a routerLink="/contact"  routerLinkActive="active" class="nav-link" (click)="menuOpen=false">Contact</a>
+      <a routerLink="/feedback" routerLinkActive="active" class="nav-link" (click)="menuOpen=false">Feedback</a>
+      <a *ngIf="authService.isAuthenticated()" routerLink="/admin" routerLinkActive="active"
+         class="nav-link" style="color:var(--accent); font-weight:700;" (click)="menuOpen=false">Dashboard</a>
+      <a *ngIf="authService.isAuthenticated()" (click)="logout(); menuOpen=false"
+         class="nav-link" style="cursor:pointer; color:#dc2626;">Logout</a>
+    </nav>
+  </header>
+
+  <!-- ══ MAIN — no container here: each page/component controls its own layout ════ -->
+  <main style="flex:1;">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- ══ FOOTER ══════════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container px-site">
+      <div class="footer-grid">
+        <!-- Brand -->
+        <div>
+          <a routerLink="/" style="font-family:var(--font-serif); font-size:1.5rem; font-weight:900; color:var(--cream); text-decoration:none; letter-spacing:-0.01em;">
+            ReadWorth<span style="color:var(--accent);">.</span>
+          </a>
+          <p class="footer-tagline">Decision-first book reviews. Know if a book is worth your time — before you spend it.</p>
+        </div>
+        <!-- Navigate -->
+        <div>
+          <h4 class="footer-heading">Navigate</h4>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.125rem;">
+            <li><a routerLink="/browse"   class="footer-link">Browse Books</a></li>
+            <li><a routerLink="/about"    class="footer-link">About</a></li>
+            <li><a routerLink="/contact"  class="footer-link">Contact</a></li>
+            <li><a routerLink="/feedback" class="footer-link">Leave Feedback</a></li>
+          </ul>
+        </div>
+        <!-- Connect -->
+        <div>
+          <h4 class="footer-heading">Connect</h4>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.125rem;">
+            <li><a href="https://www.instagram.com/randomstringx/" target="_blank" rel="noopener" class="footer-link">Instagram</a></li>
+            <li><a href="https://github.com/sumitk87549"           target="_blank" rel="noopener" class="footer-link">GitHub</a></li>
+            <li><a href="https://www.linkedin.com/in/sumitdev98/"  target="_blank" rel="noopener" class="footer-link">LinkedIn</a></li>
+            <li><a href="https://wa.me/917976611437"               target="_blank" rel="noopener" class="footer-link">WhatsApp</a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- Footer bottom -->
+      <div class="footer-bottom">
+        <span>&copy; 2026 ReadWorth · Built to save your most precious asset — <em>time</em>.</span>
+        <a routerLink="/login" style="opacity:0.2; font-size:0.65rem; color:#6b6258; margin-left:auto;" title="Developer access">dev</a>
+      </div>
+    </div>
+  </footer>
+
+</div>

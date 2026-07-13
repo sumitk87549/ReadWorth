@@ -1,0 +1,133 @@
+# How to Add Books to ReadWorth
+
+> **Shortest path:** Use the Admin Dashboard UI. No code, no SQL, no backend restarts needed.
+
+---
+
+## ✅ Method 1 — Admin Dashboard (Recommended, ~2 minutes per book)
+
+1. Open `http://localhost:4200/login`
+2. Sign in: **username** `admin` · **password** `admin`
+3. Click **+ Add Book** in the top-right of the Dashboard
+4. Fill in the form and click **Save**
+
+### Fields guide
+
+| Field | Required | Notes |
+|---|---|---|
+| **Title** | ✅ | Exact title, will auto-generate the slug |
+| **Author** | ✅ | Full author name |
+| **Slug** | auto | Auto-generated from title (e.g. `the-lean-startup`) — you can override |
+| **Category** | ✅ | Pick from the existing category list |
+| **Cover Image URL** | — | Paste a direct image URL (Amazon, Open Library, etc.) |
+| **About / Description** | — | 2–4 paragraphs about the book |
+| **Author True Story** | — | Interesting background about the author |
+| **What to Expect** | — | What reading experience to expect |
+| **Expected Outcome** | — | What the reader will gain |
+| **How Not to Judge** | — | Misconceptions to avoid |
+| **Verdict** | ✅ | `YES` / `NO` / `CONDITIONAL` |
+| **Confidence %** | ✅ | 0–100 |
+| **Verdict Reasons** | — | Bullet points (one per line) |
+| **Rating** | ✅ | 1–5 stars |
+| **Difficulty** | — | `EASY` / `MODERATE` / `CHALLENGING` |
+| **Read Time (hours)** | — | Estimated read time |
+| **Length Label** | — | e.g. `320 pages` |
+| **Language/Tone** | — | Comma-separated, e.g. `Analytical, Dense, Rigorous` |
+| **Estimated ROI** | — | Free text, e.g. `High — fundamentally shifts how you think about habits` |
+| **GoodReads Link** | — | Full URL |
+| **Amazon Link** | — | Full URL |
+
+---
+
+## ⚡ Method 2 — Direct REST API (fastest for bulk)
+
+With the backend running on port 8080:
+
+### Step 1 — Get a token
+```bash
+TOKEN=$(curl -s -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin"}' | python3 -c "import sys,json; print(json.load(sys.stdin)['token'])")
+```
+
+### Step 2 — POST the book
+```bash
+curl -X POST http://localhost:8080/api/v1/admin/books \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "title": "The Lean Startup",
+    "authorName": "Eric Ries",
+    "categoryIds": [1],
+    "verdict": "YES",
+    "confidencePercentage": 88,
+    "ourRating": 4,
+    "difficultyLevel": "EASY",
+    "expectedTimeInvestment": 7,
+    "lengthLabel": "336 pages",
+    "coverImage": "https://covers.openlibrary.org/b/id/8239177-L.jpg",
+    "aboutDescription": "The Lean Startup introduces ...",
+    "verdictReasons": ["Builds real-world intuition for iterating fast", "Short, actionable, dense with frameworks"],
+    "estimatedRoi": "High — transforms how you think about building products",
+    "goodreadsLink": "https://www.goodreads.com/book/show/10127019"
+  }'
+```
+
+### Category IDs (from your database)
+| ID | Name |
+|---|---|
+| 1 | Business |
+| 2 | Fiction |
+| 3 | History |
+| 4 | Philosophy |
+| 5 | Psychology |
+| 6 | Science |
+| 7 | Self-Help |
+
+---
+
+## 📝 Method 3 — Edit `data.sql` (persists across restarts)
+
+> Use this if you want books to survive a backend restart (H2 is in-memory, so data resets when the JVM exits).
+
+File: `ReadWorth/src/main/resources/data.sql`
+
+Add a block like this:
+
+```sql
+MERGE INTO books (id, title, author_name, slug, verdict, confidence_percentage, our_rating, cover_image, about_description)
+KEY(id)
+VALUES (
+  11,
+  'The Lean Startup',
+  'Eric Ries',
+  'the-lean-startup',
+  'YES',
+  88,
+  4,
+  'https://covers.openlibrary.org/b/id/8239177-L.jpg',
+  'A methodology for building companies under conditions of extreme uncertainty...'
+);
+
+MERGE INTO book_categories (book_id, category_id) KEY(book_id, category_id) VALUES (11, 1);
+```
+
+Then **restart the backend** to re-seed the data.
+
+---
+
+## 🖼️ Where to get cover image URLs
+
+| Source | URL pattern |
+|---|---|
+| **Open Library** | `https://covers.openlibrary.org/b/isbn/9780307887894-L.jpg` |
+| **Google Books** | Search the book → right-click cover image → Copy image address |
+| **Amazon** | Right-click the book cover on the product page → Copy image address |
+
+> **Tip:** Open Library is the most reliable free source. Replace the ISBN with the book's ISBN-13.
+
+---
+
+## 🔍 Finding ISBNs fast
+
+Go to `https://www.goodreads.com`, search the book, click the book, the URL contains the GoodReads ID. For ISBN, check the book's back cover or search `<title> isbn site:worldcat.org`.

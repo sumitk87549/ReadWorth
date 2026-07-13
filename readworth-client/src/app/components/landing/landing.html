@@ -1,0 +1,276 @@
+<!-- ══ LANDING — full-viewport hero + interactive sections ══════════════ -->
+<div class="landing-root fade-in">
+
+  <!-- ── HERO: full-screen ─────────────────────────────────────────────── -->
+  <section class="hero-section">
+    <!-- animated gradient bg -->
+    <div class="hero-bg"></div>
+    <!-- floating book shapes decoration -->
+    <div class="hero-deco" aria-hidden="true">
+      <div class="deco-book d1"></div>
+      <div class="deco-book d2"></div>
+      <div class="deco-book d3"></div>
+    </div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">The Decision-First Book Review Platform</p>
+
+      <h1 class="hero-title">
+        Is this book worth<br>
+        <span class="hero-accent">your time?</span>
+      </h1>
+
+      <p class="hero-sub">
+        Not a summary. Not a fan review. A definitive verdict — with a confidence score and the exact reason why — so you only read books that actually pay off.
+      </p>
+
+      <div class="hero-ctas">
+        <a routerLink="/browse" class="btn-primary hero-cta-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:1.125rem;height:1.125rem;flex-shrink:0;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/>
+          </svg>
+          Browse All Reviews
+        </a>
+        <a routerLink="/about" class="btn-secondary hero-cta-secondary">How We Decide →</a>
+      </div>
+
+      <!-- scroll indicator -->
+      <div class="scroll-hint" aria-hidden="true">
+        <div class="scroll-dot"></div>
+        <span>Scroll to explore</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="landing-body">
+
+    <!-- ── STATS BAR ─────────────────────────────────────────────────── -->
+    <section class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-number">10+</div>
+        <div class="stat-desc">Books Reviewed</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-number">200+</div>
+        <div class="stat-desc">Hours Saved</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-number">90%</div>
+        <div class="stat-desc">Avg. Confidence</div>
+      </div>
+    </section>
+
+    <!-- ── HOW WE DECIDE ─────────────────────────────────────────────── -->
+    <section class="landing-section">
+      <div class="section-header">
+        <p class="section-eyebrow">Our Methodology</p>
+        <h2 class="section-h2">How We Decide</h2>
+        <p class="section-sub">Four honest steps between "I should read this" and "yes, read it now".</p>
+      </div>
+      <div class="method-grid">
+        <div class="method-card" *ngFor="let step of steps">
+          <div class="method-num">{{ step.num }}</div>
+          <h3 class="method-title">{{ step.title }}</h3>
+          <p class="method-desc">{{ step.desc }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── VERDICT EXPLAINER — interactive hover ──────────────────────── -->
+    <section class="landing-section">
+      <div class="section-header">
+        <p class="section-eyebrow">What You'll See</p>
+        <h2 class="section-h2">Three Possible Verdicts</h2>
+        <p class="section-sub">Every review ends in one of these — never anything ambiguous.</p>
+      </div>
+      <div class="verdict-cards">
+        <div class="verdict-explainer yes">
+          <div class="ve-badge">YES</div>
+          <h3 class="ve-title">Worth Your Time</h3>
+          <p class="ve-desc">This book delivers on its promise. The ideas are novel, the writing serves the content, and you'll walk away with a genuine shift in thinking or skill.</p>
+        </div>
+        <div class="verdict-explainer cond">
+          <div class="ve-badge">CONDITIONAL</div>
+          <h3 class="ve-title">Depends on You</h3>
+          <p class="ve-desc">Good book — but only for a specific reader profile. We'll tell you exactly who should read it and who should skip it.</p>
+        </div>
+        <div class="verdict-explainer no">
+          <div class="ve-badge">SKIP IT</div>
+          <h3 class="ve-title">Not Worth It</h3>
+          <p class="ve-desc">The premise doesn't hold up, the content is padded, or there's a better book that covers this ground more efficiently. We'll tell you what to read instead.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FEATURED BOOKS ─────────────────────────────────────────────── -->
+    <section class="landing-section">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:0.5rem;">
+        <div>
+          <p class="section-eyebrow" style="margin-bottom:0.25rem;">Editor's Picks</p>
+          <h2 class="section-h2" style="margin:0;">Worth Your Time</h2>
+        </div>
+        <a routerLink="/browse" style="font-size:0.875rem;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap;">View all reviews →</a>
+      </div>
+
+      <div *ngIf="loading" class="featured-grid">
+        <div *ngFor="let i of [1,2,3,4,5,6]">
+          <div class="skeleton" style="aspect-ratio:2/3;border-radius:0.75rem;width:100%;"></div>
+          <div class="skeleton" style="height:0.875rem;margin-top:0.75rem;width:75%;border-radius:0.25rem;"></div>
+          <div class="skeleton" style="height:0.75rem;margin-top:0.375rem;width:50%;border-radius:0.25rem;"></div>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" class="featured-grid">
+        <a *ngFor="let book of featuredBooks" [routerLink]="getBookLink(book)" class="book-card" style="text-decoration:none;">
+          <div class="book-cover-wrap">
+            <img *ngIf="book.coverImage" [src]="book.coverImage" [alt]="book.title" class="book-cover-img" loading="lazy" (error)="book.coverImage = ''">
+            <div *ngIf="!book.coverImage" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:1rem;text-align:center;">
+              <span style="font-family:var(--font-serif);font-size:0.875rem;font-weight:700;color:var(--muted);line-height:1.3;">{{ book.title }}</span>
+            </div>
+            <span class="verdict-badge" [class]="getVerdictClass(book.verdict)">{{ getVerdictLabel(book.verdict) }}</span>
+          </div>
+          <h3 class="book-title">{{ book.title }}</h3>
+          <p class="book-author">{{ book.authorName }}</p>
+          <div class="stars">
+            <svg *ngFor="let _ of getStars(book.ourRating)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:0.875rem;height:0.875rem;">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd"/>
+            </svg>
+            <svg *ngFor="let _ of getEmptyStars(book.ourRating)" class="star-empty" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:0.875rem;height:0.875rem;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/>
+            </svg>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ── CTA BANNER ────────────────────────────────────────────────── -->
+    <section class="cta-banner">
+      <div class="cta-inner">
+        <p class="section-eyebrow" style="color:var(--accent);margin-bottom:0.5rem;">You're busy. We get it.</p>
+        <h2 style="font-family:var(--font-serif);font-size:clamp(1.625rem,3.5vw,2.5rem);font-weight:900;color:var(--cream);line-height:1.15;margin:0 0 1rem;">Don't waste 15 hours on the wrong book.</h2>
+        <p style="font-size:0.9375rem;color:#a09488;max-width:28rem;margin:0 auto 2rem;line-height:1.75;">Every bad book costs you 8–20 hours of your life. We read them so you can make a confident call in 60 seconds.</p>
+        <a routerLink="/browse" class="btn-primary" style="text-decoration:none;font-size:1rem;padding:0.9rem 2rem;">Start Reading Smart →</a>
+      </div>
+    </section>
+
+  </div><!-- /landing-body -->
+</div><!-- /landing-root -->
+
+<style>
+  /* ── Root ── */
+  .landing-root { display:flex; flex-direction:column; }
+
+  /* ── Hero ── */
+  .hero-section {
+    position: relative;
+    min-height: calc(100svh - 56px); /* full viewport minus header */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 4rem 1rem 3rem;
+  }
+  .hero-bg {
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse 90% 70% at 50% -10%,
+      color-mix(in srgb, var(--accent) 14%, transparent), transparent 65%),
+      radial-gradient(ellipse 60% 50% at 80% 80%,
+      color-mix(in srgb, var(--accent) 6%, transparent), transparent);
+    pointer-events:none;
+    animation: bgPulse 8s ease-in-out infinite alternate;
+  }
+  @keyframes bgPulse { from{opacity:0.7} to{opacity:1} }
+
+  /* decorative floating book rectangles */
+  .hero-deco { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+  .deco-book {
+    position:absolute; border-radius:4px; opacity:0.06;
+    background:var(--accent);
+    animation: float 6s ease-in-out infinite;
+  }
+  .d1 { width:60px; height:90px; top:12%; left:8%; animation-delay:0s; }
+  .d2 { width:44px; height:66px; top:65%; right:10%; animation-delay:2s; }
+  .d3 { width:36px; height:54px; top:30%; right:20%; animation-delay:4s; }
+  @keyframes float {
+    0%,100% { transform:translateY(0) rotate(-3deg); }
+    50%      { transform:translateY(-16px) rotate(3deg); }
+  }
+
+  .hero-content { position:relative; text-align:center; max-width:52rem; }
+  .hero-eyebrow { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:var(--accent); margin-bottom:1.25rem; }
+  .hero-title {
+    font-family:var(--font-serif);
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight:900; color:var(--ink); line-height:1.06; letter-spacing:-0.03em;
+    margin:0 auto 1.5rem; max-width:14em;
+    animation: heroIn 0.8s ease both;
+  }
+  .hero-accent { color:var(--accent); }
+  @keyframes heroIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+
+  .hero-sub { font-size:clamp(1rem,2vw,1.25rem); color:var(--muted); max-width:34rem; margin:0 auto 2.5rem; line-height:1.75; animation:heroIn 0.8s 0.15s ease both; }
+
+  .hero-ctas { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; animation:heroIn 0.8s 0.3s ease both; }
+  .hero-cta-primary  { font-size:1rem; padding:0.9rem 2rem; display:inline-flex; align-items:center; gap:0.5rem; }
+  .hero-cta-secondary{ font-size:1rem; padding:0.875rem 1.75rem; }
+
+  .scroll-hint { margin-top:3.5rem; display:flex; flex-direction:column; align-items:center; gap:0.5rem; color:var(--muted); font-size:0.75rem; letter-spacing:0.08em; animation:heroIn 1s 0.6s ease both; }
+  .scroll-dot { width:20px; height:32px; border:2px solid var(--border); border-radius:9999px; position:relative; }
+  .scroll-dot::after { content:''; position:absolute; top:5px; left:50%; transform:translateX(-50%); width:4px; height:8px; background:var(--accent); border-radius:9999px; animation:scrollBob 1.8s ease-in-out infinite; }
+  @keyframes scrollBob { 0%,100%{opacity:1;top:5px} 50%{opacity:0.4;top:13px} }
+
+  /* ── Landing body ── */
+  .landing-body { max-width:1200px; margin:0 auto; padding:0 1rem 2rem; width:100%; }
+  @media(min-width:640px)  { .landing-body { padding:0 1.5rem 2rem; } }
+  @media(min-width:1024px) { .landing-body { padding:0 2.5rem 2rem; } }
+
+  /* ── Stats ── */
+  .stats-bar { display:flex; align-items:center; justify-content:center; gap:0; background:var(--surface); border:1.5px solid var(--border); border-radius:1rem; overflow:hidden; margin:0 0 4rem; }
+  .stat-item { flex:1; padding:1.75rem 1rem; text-align:center; }
+  .stat-number { font-family:var(--font-serif); font-size:2.25rem; font-weight:900; color:var(--accent); line-height:1; }
+  .stat-desc   { font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-top:0.25rem; }
+  .stat-divider{ width:1px; height:4rem; background:var(--border); flex-shrink:0; }
+
+  /* ── Sections ── */
+  .landing-section { margin-bottom:5rem; }
+  .section-header { text-align:center; margin-bottom:2.5rem; }
+  .section-eyebrow { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.18em; color:var(--accent); margin-bottom:0.5rem; }
+  .section-h2  { font-family:var(--font-serif); font-size:clamp(1.625rem,3vw,2.25rem); font-weight:800; color:var(--ink); margin:0 0 0.625rem; }
+  .section-sub { font-size:0.9375rem; color:var(--muted); max-width:30rem; margin:0 auto; line-height:1.7; }
+
+  /* ── Methodology grid ── */
+  .method-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1.25rem; }
+  .method-card { background:var(--surface); border:1.5px solid var(--border); border-left:4px solid var(--accent); border-radius:0.875rem; padding:1.5rem; transition:all 0.2s; }
+  .method-card:hover { box-shadow:0 8px 28px rgba(0,0,0,0.1); transform:translateY(-3px); }
+  .method-num   { font-family:var(--font-serif); font-size:1.75rem; font-weight:900; color:var(--accent); margin-bottom:0.625rem; line-height:1; }
+  .method-title { font-family:var(--font-serif); font-weight:700; color:var(--ink); margin-bottom:0.5rem; font-size:1.0625rem; }
+  .method-desc  { font-size:0.875rem; color:var(--muted); line-height:1.65; }
+
+  /* ── Verdict explainers ── */
+  .verdict-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.25rem; }
+  .verdict-explainer { background:var(--surface); border:2px solid; border-radius:1rem; padding:1.75rem; transition:all 0.2s; cursor:default; }
+  .verdict-explainer:hover { transform:translateY(-4px); box-shadow:0 12px 36px rgba(0,0,0,0.12); }
+  .verdict-explainer.yes  { border-color:color-mix(in srgb,#16a34a 35%,transparent); }
+  .verdict-explainer.cond { border-color:color-mix(in srgb,#d97706 35%,transparent); }
+  .verdict-explainer.no   { border-color:color-mix(in srgb,#dc2626 35%,transparent); }
+  .ve-badge { display:inline-block; font-size:0.65rem; font-weight:800; letter-spacing:0.1em; padding:0.25rem 0.75rem; border-radius:9999px; color:#fff; margin-bottom:1rem; }
+  .yes  .ve-badge { background:#16a34a; }
+  .cond .ve-badge { background:#d97706; }
+  .no   .ve-badge { background:#dc2626; }
+  .ve-title { font-family:var(--font-serif); font-size:1.125rem; font-weight:700; color:var(--ink); margin-bottom:0.625rem; }
+  .ve-desc  { font-size:0.875rem; color:var(--muted); line-height:1.7; }
+
+  /* ── Featured grid ── */
+  .featured-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.25rem; }
+  @media(min-width:480px) { .featured-grid { grid-template-columns:repeat(2,1fr); gap:1.5rem; } }
+  @media(min-width:640px) { .featured-grid { grid-template-columns:repeat(3,1fr); } }
+  @media(min-width:900px) { .featured-grid { grid-template-columns:repeat(4,1fr); } }
+  @media(min-width:1100px){ .featured-grid { grid-template-columns:repeat(6,1fr); } }
+
+  /* ── CTA banner ── */
+  .cta-banner { background:var(--oak); border-radius:1.375rem; border:2px solid var(--accent); margin-bottom:3rem; }
+  .cta-inner  { padding:3rem 1.5rem; text-align:center; }
+  @media(min-width:640px){ .cta-inner { padding:3.5rem 3rem; } }
+</style>

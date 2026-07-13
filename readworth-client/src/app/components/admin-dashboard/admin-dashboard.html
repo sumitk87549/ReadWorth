@@ -1,0 +1,144 @@
+<div class="container px-site" style="padding:1rem 0 4rem;">
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; padding-bottom:1.25rem; border-bottom:2px solid var(--border);">
+    <div>
+      <h1 style="font-family:var(--font-serif); font-size:2rem; font-weight:900; color:var(--ink); margin:0 0 0.25rem;">Admin Dashboard</h1>
+      <p style="font-size:0.8125rem; color:var(--muted); margin:0;">ReadWorth Content Management</p>
+    </div>
+    <div style="display:flex; align-items:center; gap:0.75rem;">
+      <a routerLink="/" style="font-size:0.8rem; color:var(--muted); text-decoration:none; padding:0.5rem 0.875rem; border:1.5px solid var(--border); border-radius:0.5rem; transition:all 0.2s;"
+         onmouseover="this.style.borderColor='var(--accent)'; this.style.color='var(--accent)'"
+         onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--muted)'">← View Site</a>
+      <button *ngIf="!showForm && activeTab === 'books'" (click)="addNewBook()" class="btn-primary">+ Add Book</button>
+    </div>
+  </div>
+
+  <!-- ── Stats ──────────────────────────────────────────────────────────── -->
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:1rem; margin-bottom:2rem;">
+    <div style="background:var(--surface); border:1.5px solid var(--border); border-radius:0.75rem; padding:1.25rem;">
+      <div style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.25rem;">Total Books</div>
+      <div style="font-family:var(--font-serif); font-size:2rem; font-weight:900; color:var(--accent);">{{ books.length }}</div>
+    </div>
+    <div style="background:var(--surface); border:1.5px solid var(--border); border-radius:0.75rem; padding:1.25rem;">
+      <div style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.25rem;">Verdict: YES</div>
+      <div style="font-family:var(--font-serif); font-size:2rem; font-weight:900; color:#16a34a;">{{ books | json | slice:0:0 }}{{ (books | json).split('"YES"').length - 1 }}</div>
+    </div>
+    <div style="background:var(--surface); border:1.5px solid var(--border); border-radius:0.75rem; padding:1.25rem;">
+      <div style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.25rem;">Feedback</div>
+      <div style="font-family:var(--font-serif); font-size:2rem; font-weight:900; color:var(--accent);">{{ feedbacks.length }}</div>
+    </div>
+  </div>
+
+  <!-- ── Tabs ───────────────────────────────────────────────────────────── -->
+  <div *ngIf="!showForm" style="display:flex; border-bottom:2px solid var(--border); gap:0; margin-bottom:1.5rem;">
+    <button (click)="activeTab = 'books'"
+            [style.border-bottom-color]="activeTab === 'books' ? 'var(--accent)' : 'transparent'"
+            [style.color]="activeTab === 'books' ? 'var(--accent)' : 'var(--muted)'"
+            style="padding:0.75rem 1.5rem; font-size:0.8125rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; border:none; border-bottom:3px solid transparent; background:none; cursor:pointer; transition:all 0.2s;">
+      📚 Books
+    </button>
+    <button (click)="activeTab = 'feedback'"
+            [style.border-bottom-color]="activeTab === 'feedback' ? 'var(--accent)' : 'transparent'"
+            [style.color]="activeTab === 'feedback' ? 'var(--accent)' : 'var(--muted)'"
+            style="padding:0.75rem 1.5rem; font-size:0.8125rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; border:none; border-bottom:3px solid transparent; background:none; cursor:pointer; transition:all 0.2s;">
+      💬 Feedback <span *ngIf="feedbacks.length" style="background:var(--accent); color:#fff; border-radius:9999px; font-size:0.65rem; padding:0.1rem 0.45rem; margin-left:0.375rem; vertical-align:middle;">{{ feedbacks.length }}</span>
+    </button>
+  </div>
+
+  <!-- ── Book Form ──────────────────────────────────────────────────────── -->
+  <div *ngIf="showForm" class="fade-in">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <h2 style="font-family:var(--font-serif); font-size:1.5rem; font-weight:800; color:var(--ink); margin:0;">
+        {{ editingBook ? 'Edit: ' + editingBook.title : 'Add New Book' }}
+      </h2>
+      <button (click)="onCancelForm()" style="background:none; border:1.5px solid var(--border); color:var(--muted); padding:0.5rem 1rem; border-radius:0.5rem; cursor:pointer; font-size:0.875rem; transition:all 0.2s;"
+              onmouseover="this.style.borderColor='var(--accent)'; this.style.color='var(--accent)'"
+              onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--muted)'">✕ Cancel</button>
+    </div>
+    <app-admin-book-form [book]="editingBook" (save)="onSaveBook($event)" (cancel)="onCancelForm()"></app-admin-book-form>
+  </div>
+
+  <!-- ── Books Table ────────────────────────────────────────────────────── -->
+  <div *ngIf="!showForm && activeTab === 'books'" class="fade-in">
+    <div style="background:var(--surface); border:1.5px solid var(--border); border-radius:1rem; overflow:hidden;">
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-size:0.875rem;">
+          <thead>
+            <tr style="background:var(--paper); border-bottom:1.5px solid var(--border);">
+              <th style="padding:0.875rem 1.25rem; text-align:left; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); white-space:nowrap;">ID</th>
+              <th style="padding:0.875rem 1.25rem; text-align:left; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted);">Title</th>
+              <th style="padding:0.875rem 1.25rem; text-align:left; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted);">Author</th>
+              <th style="padding:0.875rem 1.25rem; text-align:left; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted);">Verdict</th>
+              <th style="padding:0.875rem 1.25rem; text-align:left; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted);">Slug</th>
+              <th style="padding:0.875rem 1.25rem; text-align:right; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted);">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="loading">
+              <td colspan="6" style="padding:2rem; text-align:center; color:var(--muted); font-style:italic;">Loading…</td>
+            </tr>
+            <tr *ngIf="!loading && books.length === 0">
+              <td colspan="6" style="padding:2rem; text-align:center; color:var(--muted); font-style:italic;">No books found.</td>
+            </tr>
+            <tr *ngFor="let book of books; let i = index"
+                [style.background]="i % 2 === 0 ? 'transparent' : 'color-mix(in srgb, var(--paper) 60%, transparent)'"
+                style="border-bottom:1px solid var(--border); transition:background 0.15s;"
+                onmouseover="this.style.background='color-mix(in srgb, var(--accent) 5%, transparent)'"
+                onmouseout="this.style.background='transparent'">
+              <td style="padding:0.875rem 1.25rem; color:var(--muted); font-size:0.75rem;">{{ book.id }}</td>
+              <td style="padding:0.875rem 1.25rem; font-weight:600; color:var(--ink);">{{ book.title }}</td>
+              <td style="padding:0.875rem 1.25rem; color:var(--muted);">{{ book.authorName }}</td>
+              <td style="padding:0.875rem 1.25rem;">
+                <span [style]="getVerdictStyle(book.verdict)"
+                      style="padding:0.2rem 0.625rem; border-radius:9999px; font-size:0.7rem; font-weight:700; letter-spacing:0.06em;">
+                  {{ book.verdict }}
+                </span>
+              </td>
+              <td style="padding:0.875rem 1.25rem; color:var(--muted); font-size:0.75rem; font-family:monospace;">{{ book.slug }}</td>
+              <td style="padding:0.875rem 1.25rem; text-align:right; white-space:nowrap;">
+                <button (click)="editBook(book)"
+                        style="background:none; border:1px solid var(--border); color:var(--accent); padding:0.35rem 0.875rem; border-radius:0.375rem; cursor:pointer; font-size:0.8rem; font-weight:600; transition:all 0.15s; margin-right:0.5rem;"
+                        onmouseover="this.style.background='var(--accent)'; this.style.color='#fff'"
+                        onmouseout="this.style.background='none'; this.style.color='var(--accent)'">Edit</button>
+                <button (click)="deleteBook(book.id!)"
+                        style="background:none; border:1px solid color-mix(in srgb, #dc2626 40%, transparent); color:#dc2626; padding:0.35rem 0.875rem; border-radius:0.375rem; cursor:pointer; font-size:0.8rem; font-weight:600; transition:all 0.15s;"
+                        onmouseover="this.style.background='#dc2626'; this.style.color='#fff'"
+                        onmouseout="this.style.background='none'; this.style.color='#dc2626'">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Feedback Tab ───────────────────────────────────────────────────── -->
+  <div *ngIf="!showForm && activeTab === 'feedback'" class="fade-in">
+
+    <div *ngIf="feedbackLoading" style="text-align:center; padding:3rem; color:var(--muted); font-style:italic;">Loading feedback…</div>
+
+    <div *ngIf="!feedbackLoading && feedbacks.length === 0"
+         style="text-align:center; padding:4rem; background:var(--surface); border:1.5px solid var(--border); border-radius:1rem; color:var(--muted); font-style:italic;">
+      No feedback submissions yet.
+    </div>
+
+    <div *ngIf="!feedbackLoading && feedbacks.length > 0" style="display:flex; flex-direction:column; gap:1rem;">
+      <div *ngFor="let fb of feedbacks; let i = index"
+           style="background:var(--surface); border:1.5px solid var(--border); border-radius:0.875rem; padding:1.5rem; transition:border-color 0.2s;"
+           onmouseover="this.style.borderColor='var(--accent)'"
+           onmouseout="this.style.borderColor='var(--border)'">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.875rem;">
+          <div>
+            <span style="font-weight:700; color:var(--ink); font-size:0.9375rem;">{{ fb.name || 'Anonymous' }}</span>
+            <span *ngIf="fb.email" style="color:var(--muted); font-size:0.8125rem; margin-left:0.5rem;">· {{ fb.email }}</span>
+          </div>
+          <span style="font-size:0.7rem; color:var(--muted); background:var(--paper); padding:0.25rem 0.6rem; border-radius:9999px; border:1px solid var(--border);">#{{ i + 1 }}</span>
+        </div>
+        <p style="color:var(--ink); line-height:1.7; margin:0; font-size:0.9375rem; white-space:pre-line;">{{ fb.message }}</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
